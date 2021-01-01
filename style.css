@@ -1,0 +1,31 @@
+body {
+    font-family: sans-serif;
+    font-size: 14px;
+}
+
+#game {
+    border: 2px solid gray;
+}
+
+#dev {
+    margin: auto;
+    text-align: left;
+    float: left;
+}
+
+#gamedata {
+    text-align: left;
+    border: 2px solid gray;
+    position: absolute;
+    background-color: #0004;
+    cursor: move;
+    top: 500px;
+    left: 0px;
+}
+
+pre {outline: 1px solid #ccc; padding: 5px; margin: 5px; }
+.string { color: green; }
+.number { color: darkorange; }
+.boolean { color: blue; }
+.null { color: magenta; }
+.key { color: red; }
