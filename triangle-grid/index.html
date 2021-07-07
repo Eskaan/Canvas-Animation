@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Animations <3</title>
+    <script defer type="text/javascript" src="animation.js"></script>
+</head>
+<body style="margin: 0;">
+<canvas id="animationCanvas" height="800" width="600" style="background-color: black;"></canvas>
+<script type="text/javascript">
+  let gameId;
+  window.addEventListener('load', () => {
+    gameId = startAnimation(100, .00004, 5, 200, .1, 50, 100);
+  });
+  window.addEventListener('resize', () =>{
+    clearInterval(gameId);
+    gameId = startAnimation(100, .00004, 5, 200, .1, 50, 100);
+  })
+</script>
+</body>
+</html>
