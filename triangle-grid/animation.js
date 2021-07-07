@@ -5,11 +5,19 @@
  * @param speed speed in px the nodes move per frame
  * @param range the range in with the struts are drawn
  * @param opacity the opacity added per frame (how fast the struts are disappearing)
- * @param colorSet number from 0 to 360 to choose colorBand position
- * @param colorBandWidth width of the colorSet - 360 is rainbow
+ * @param color callback taking a value from 0 to 360 as the color of the strut
  * @returns id of renderer thread - use *clearInterval(<id>)* to stop
  */
-function startAnimation(ms = 100, npp = .000025, speed = 4, range = 200, opacity = .05, colorSet = 0, colorBandWidth = 355) {
+function startAnimation(
+  ms = 100,
+  npp = .000025,
+  speed = 4,
+  range = 200,
+  opacity = .05,
+  color = (node, nodeN) => { //just an example
+    return Math.abs(Math.floor(Math.tanh(node.x - nodeN.x / node.y - nodeN.y) * 360)) + 0
+  }
+) {
   const canvas = document.getElementById('animationCanvas');
   const ctx = canvas.getContext('2d');
   const height = window.innerHeight;
@@ -52,8 +60,8 @@ function startAnimation(ms = 100, npp = .000025, speed = 4, range = 200, opacity
           ctx.beginPath();
           ctx.moveTo(node.x, node.y);
           ctx.lineTo(nodeN.x, nodeN.y);
-          const color = correctColor(Math.abs(Math.floor(Math.tanh(dx / dy) * colorBandWidth)) + colorSet);
-          ctx.strokeStyle = `hsla(${color}, 100%, 50%, ${Math.abs(distance / range - 1)})`;
+          //const color = correctColor(Math.abs(Math.floor(Math.tanh(dx / dy) * colorBandWidth)) + colorSet);
+          ctx.strokeStyle = `hsla(${color(node, nodeN)}, 100%, 50%, ${Math.abs(distance / range - 1)})`;
           ctx.stroke();
         }
       });
