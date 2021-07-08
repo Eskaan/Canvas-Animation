@@ -11,13 +11,13 @@
   let gameId;
   window.addEventListener('load', () => {
     gameId = startAnimation(100, .00004, 5, 200, .1, (node, nodeN) => {
-      return Math.abs(Math.floor(Math.tanh(node.x - nodeN.x / node.y - nodeN.y) * 100)) + 50
+      return Math.abs(Math.floor(Math.tanh((node.x - nodeN.x) / (node.y - nodeN.y)) * 100)) + 50
     });
   });
   window.addEventListener('resize', () => {
     clearInterval(gameId);
     gameId = startAnimation(100, .00004, 5, 200, .1, (node, nodeN) => {
-      return Math.abs(Math.floor(Math.tanh(node.x - nodeN.x / node.y - nodeN.y) * 100)) + 50
+      return Math.abs(Math.floor(Math.tanh((node.x - nodeN.x) / (node.y - nodeN.y)) * 100)) + 50
     });
   })
 </script>

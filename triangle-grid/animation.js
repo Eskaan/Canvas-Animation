@@ -15,7 +15,7 @@ function startAnimation(
   range = 200,
   opacity = .05,
   color = (node, nodeN) => { //just an example
-    return Math.abs(Math.floor(Math.tanh(node.x - nodeN.x / node.y - nodeN.y) * 360)) + 0
+    return Math.abs(Math.floor(Math.tanh((node.x - nodeN.x) / (node.y - nodeN.y)) * 360)) + 0
   }
 ) {
   const canvas = document.getElementById('animationCanvas');
