@@ -24,6 +24,8 @@ function startAnimation(
   const width = window.innerWidth;
   const nodes = [];
 
+  canvas.addEventListener('click', () => canvas.requestFullscreen());
+
   function newNode() {
     return {
       x: Math.random() * width,
