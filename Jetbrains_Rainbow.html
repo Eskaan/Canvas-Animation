@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>JetBrains LOL</title>
+    <style>
+        .funContainer {
+            margin-top: 24%;
+            text-align: center;
+        }
+
+        #fun {
+            font-size: 40px
+        }
+
+        .marginRemove {
+            margin-top: 55%;
+        }
+
+        #table {
+            font-size: 12px;
+            border: 1px solid black;
+        }
+
+        #table th {
+            border: 1px solid black;
+        }
+
+        .highlight {
+            background-color: darkred;
+        }
+    </style>
+</head>
+<body>
+<div class="funContainer">
+    <p id="fun">Table Down Below :P</p>
+</div>
+<button class="marginRemove" onclick="this.style.marginTop = '0px';this.outerHTML = '';">Remove margin</button>
+<table id="table"></table>
+<script type="text/javascript">
+  window.addEventListener('load', () => {
+    const firstName = [
+      'IntelliJ',
+      'Web',
+      'Php',
+      'Py',
+      'C',
+      'Data',
+      'Rider',
+      'Go',
+      'Projector',
+      'Ruby',
+      'App'];
+    const lastName = [
+      ' EDU',
+      ' Professional',
+      ' Community Edition',
+      ' Community',
+      'Code',
+      'Mine',
+      'Land',
+      'Grip',
+      'Lion',
+      'Lore',
+      'Storm']
+      .concat(firstName);
+    setInterval(() => {
+      const randBool = Math.floor(Math.random() * 2) === 1;
+      const randomNameIndex = {
+        first: Math.floor(Math.random() * firstName.length),
+        last: Math.floor(Math.random() * lastName.length)
+      }
+      document.getElementById('fun').innerHTML =
+        '<span style="color: hsl(0, 0%, ' + (randBool ? 33 : 0) + '%)">' + firstName[randomNameIndex.first] + '</span>' +
+        '<span style="color: hsl(0, 0%, ' + (randBool ? 0 : 33) + '%)">' + lastName[randomNameIndex.last] + '</span>';
+
+      const tableElem = document.querySelector(`#table :first-child :nth-child(${randomNameIndex.last + 2}) :nth-child(${randomNameIndex.first + 2})`);
+      if (tableElem !== null) {
+        tableElem.classList.add('highlight');
+        setTimeout(() => tableElem.classList.remove('highlight'), 1500);
+      } else
+        console.log(tableElem);
+    }, 1500);
+
+    document.getElementById('table').innerHTML =
+      '<tr style="color: red;"><th/>' +
+      firstName.map(first => {
+        return '<th>' + first + '</th>';
+      }).join('') + '</tr>' +
+      lastName.map(last => {
+        return '<tr>' +
+          '<th style="color: red;">' + last + '</th>' +
+          firstName.flatMap(first => {
+            return '<th>' + first + last + '</th>'
+          }).join('') + '</tr>';
+      }).join('');
+  });
+</script>
+</body>
+</html>
