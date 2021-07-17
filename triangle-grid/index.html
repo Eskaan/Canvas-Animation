@@ -32,6 +32,15 @@
     return 100;
   }
   window.addEventListener('load', () => {
+    const text = [
+      'type: ' + random.switch,
+      'type: ' + random.switch + ' | colorMix: ' + Math.floor(random.one * 360),
+      'type: ' + random.switch + ' | schema: ' +
+      ((Math.floor(random.one * 3) === 0) ? 'top-bottom' :
+        (Math.floor(random.one * 3) === 1) ? 'left-right' : 'topLeft-bottomRight'),
+    ]
+    document.getElementById('info').innerText = text[random.switch];
+
     let gameId;
 
     function newGame() {
