@@ -8,18 +8,44 @@
 <body style="margin: 0; cursor: none;">
 <canvas height="800" id="animationCanvas" style="background-color: black;" width="600"></canvas>
 <script type="text/javascript">
-  let gameId;
+  const random = {
+    switch: Math.floor(Math.random() * (2 + 1)),
+    one: Math.random()
+  }//
+  console.log(random);
+  const colorFunc = (node, nodeN) => {
+    switch (random.switch) {
+      case 0:
+        return (node.color + nodeN.color) / 2;
+      case 1:
+        return Math.abs(Math.floor(Math.tanh((node.x - nodeN.x) / (node.y - nodeN.y)) * 150)) + random.one * 360;
+      case 2:
+        switch (Math.floor(random.one * 3)) {
+          case 0:
+            return (node.y + nodeN.y) / 2 / window.innerHeight * 360;
+          case 1:
+            return (node.x + nodeN.x) / 2 / window.innerWidth * 360;
+          case 2:
+            return (node.x + node.y + nodeN.x + nodeN.y) / 2 / (window.innerWidth + window.innerHeight) * 360;
+        }
+    }
+    return 100;
+  }
   window.addEventListener('load', () => {
-    gameId = startAnimation(100, .00004, 5, 200, .1, (node, nodeN) => {
-      return Math.abs(Math.floor(Math.tanh((node.x - nodeN.x) / (node.y - nodeN.y)) * 100)) + 50
-    });
+    let gameId;
+
+    function newGame() {
+      if (gameId) clearInterval(gameId);
+      gameId = startAnimation(100, .00004, 5, 200, .1, (node, nodeN) => {
+        return colorFunc(node, nodeN);
+      });
+    }
+
+    newGame();
+    window.addEventListener('resize', () => {
+      newGame();
+    })
   });
-  window.addEventListener('resize', () => {
-    clearInterval(gameId);
-    gameId = startAnimation(100, .00004, 5, 200, .1, (node, nodeN) => {
-      return Math.abs(Math.floor(Math.tanh((node.x - nodeN.x) / (node.y - nodeN.y)) * 100)) + 50
-    });
-  })
 </script>
 </body>
 </html>
