@@ -15,7 +15,7 @@ function startAnimation(
   range = 200,
   opacity = .05,
   color = (node, nodeN) => { //just an example
-    return Math.abs(Math.floor(Math.tanh((node.x - nodeN.x) / (node.y - nodeN.y)) * 360)) + 0
+    return Math.abs(Math.floor(Math.tanh((node.x - nodeN.x) / (node.y - nodeN.y)) * 360)) + 50
   }
 ) {
   const canvas = document.getElementById('animationCanvas');
@@ -32,12 +32,6 @@ function startAnimation(
       y: Math.random() * height,
       angle: Math.random() * 360,
     };
-  }
-
-  function correctColor(c) {
-    while (c < 0) c += 360;
-    while (c > 360) c -= 360;
-    return c;
   }
 
   const nodesNumber = Math.floor(height * width * npp);
