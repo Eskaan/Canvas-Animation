@@ -1,14 +1,6 @@
 function devtoolsInit() {
   console.log("Devtools init")
-  dataElem = document.getElementById('gamedata');
-  document.getElementById('dev').innerHTML =
-    getSlider("game.speed.render", 10000) +
-    getSlider("game.speed.calc", 10000) +
-    getSlider("game.speed.move", 10000) +
-    getSlider("game.speed.turn", 10000) +
-    getSlider("game.set.gliders", 10000) +
-    getSlider("game.set.effect", 10000) +
-    getSlider("game.set.range", 10000);
+  const dataElem = document.getElementById('gamedata');
   setInterval(() => {
     dataElem.innerHTML = syntaxHighlight(game);
   }, 100);
@@ -35,15 +27,6 @@ devtoolsMouseDown = {
   x: 10,
   y: 10
 };
-
-function getSlider(varName, max = 100) {
-  return (`
-    <div>
-        <input type="number" min="0" max="${max}" value="${varName}" onchange="${varName} = this.valueAsNumber;">
-        <span>${varName}</span>
-    </div>
-`);
-}
 
 //Thanks Stackoverflow ^u^
 function syntaxHighlight(json) {
