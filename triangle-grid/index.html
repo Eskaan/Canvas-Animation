@@ -8,60 +8,84 @@
 <body style="margin: 0; cursor: none;">
 <canvas height="800" id="animationCanvas" style="background-color: black;" width="600"></canvas>
 <script type="text/javascript">
-  let getParams = {};
-  window.location.search
-    .substr(1)
-    .split('&')
-    .map(item => {return item.split('=')})
-    .forEach(item => getParams[item[0]] = item[1]);
+    let getParams = {};
+    window.location.search
+        .substr(1)
+        .split("&")
+        .map(item => {
+            return item.split("=");
+        })
+        .forEach(item => getParams[item[0]] = item[1] ? item[1] : "");
 
-  const random = {
-    switch: getParams.type ? parseInt(getParams.type) : Math.floor(Math.random() * (2 + 1)),
-    one: getParams.one ? parseFloat(getParams.one) : Math.random()
-  }
-  console.log(random);
-  const colorFunc = (node, nodeN) => {
-    switch (random.switch) {
-      case 0:
-        return (node.color + nodeN.color) / 2;
-      case 1:
-        return Math.abs(Math.floor(Math.tanh((node.x - nodeN.x) / (node.y - nodeN.y)) * 150)) + random.one * 360;
-      case 2:
-        switch (Math.floor(random.one * 3)) {
-          case 0:
-            return (node.y + nodeN.y) / 2 / window.innerHeight * 360;
-          case 1:
-            return (node.x + nodeN.x) / 2 / window.innerWidth * 360;
-          case 2:
-            return (node.x + node.y + nodeN.x + nodeN.y) / 2 / (window.innerWidth + window.innerHeight) * 360;
+    //parse params to int/float
+    getParams.type = getParams.type ? parseInt(getParams.type) : Math.floor(Math.random() * (2 + 1));
+    getParams.one = getParams.one ? parseFloat(getParams.one) : Math.random();
+    getParams.speed = getParams.speed ? parseInt(getParams.speed) : 100;
+    getParams.npp = getParams.npp ? parseFloat(getParams.npp) / 1000 : .00004;
+    getParams.range = getParams.range ? parseInt(getParams.range) : 200;
+    getParams.distance = getParams.distance ? parseInt(getParams.distance) : 5;
+    getParams.opacity = getParams.opacity ? parseFloat(getParams.opacity) : .1;
+
+    const colorFunc = (node, nodeN) => {
+        switch (getParams.type) {
+            case 0:
+                return (node.color + nodeN.color) / 2;
+            case 1:
+                return Math.abs(Math.floor(Math.tanh((node.x - nodeN.x) / (node.y - nodeN.y)) * 150)) + getParams.one * 360;
+            case 2:
+                switch (Math.floor(getParams.one * 3)) {
+                    case 0:
+                        return (node.y + nodeN.y) / 2 / window.innerHeight * 360;
+                    case 1:
+                        return (node.x + nodeN.x) / 2 / window.innerWidth * 360;
+                    case 2:
+                        return (node.x + node.y + nodeN.x + nodeN.y) / 2 / (window.innerWidth + window.innerHeight) * 360;
+                }
         }
-    }
-    return 100;
-  }
-  window.addEventListener('load', () => {
-    const text = [
-      'type: ' + random.switch,
-      'type: ' + random.switch + ' | colorMix: ' + Math.floor(random.one * 360),
-      'type: ' + random.switch + ' | schema: ' +
-      ((Math.floor(random.one * 3) === 0) ? 'top-bottom' :
-        (Math.floor(random.one * 3) === 1) ? 'left-right' : 'topLeft-bottomRight'),
-    ]
-    document.getElementById('info').innerText = text[random.switch];
+        return 100;
+    };
 
-    let gameId;
+    window.addEventListener("load", () => {
+        if (getParams.noInfo !== "") {
+            const text = [
+                "type: " + getParams.type,
+                "type: " + getParams.type + " | colorMix: " + Math.floor(getParams.one * 360),
+                "type: " + getParams.type + " | schema: " +
+                ((Math.floor(getParams.one * 3) === 0) ? "top-bottom" :
+                    (Math.floor(getParams.one * 3) === 1) ? "left-right" : "topLeft-bottomRight")
+            ];
+            const moreText =
+                " | speed: " + getParams.speed +
+                " | range: " + getParams.range +
+                " | distance: " + getParams.distance +
+                " | npp: " + getParams.npp * 1000 +
+                " => " + Math.floor(window.innerHeight * window.innerWidth * getParams.npp) + " nodes" +
+                " | opacity: " + getParams.opacity;
+            document.getElementById("info").innerText =
+                text[getParams.type] + (getParams.moreInfo === "" ? moreText : "");
+        } else {
+            document.getElementById("info").parentElement.outerHTML = "";
+        }
 
-    function newGame() {
-      if (gameId) clearInterval(gameId);
-      gameId = startAnimation(100, .00004, 5, 200, .1, (node, nodeN) => {
-        return colorFunc(node, nodeN);
-      });
-    }
+        let gameIntervals;
 
-    newGame();
-    window.addEventListener('resize', () => {
-      newGame();
-    })
-  });
+        function newGame() {
+            if (gameIntervals) gameIntervals.forEach(i => clearInterval(i));
+            gameIntervals = startAnimation(getParams.speed, getParams.npp, getParams.distance, getParams.range, getParams.opacity, (node, nodeN) => {
+                return colorFunc(node, nodeN);
+            });
+            console.log(gameIntervals);
+        }
+
+        window.addEventListener("resize", () => {
+            newGame();
+        });
+        newGame();
+    });
 </script>
+<div style="position: absolute; bottom: 10px; right: 10px;">
+    <button id="info"></button>
+    <button onclick="location.reload();">Reload</button>
+</div>
 </body>
 </html>
